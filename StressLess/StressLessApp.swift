@@ -9,6 +9,10 @@ import SwiftUI
 
 @main
 struct StressLessApp: App {
+    @UIApplicationDelegateAdaptor(StressLessAppDelegate.self) var appDelegate
+    @AppStorage("isSignedIn") var isSignedIn = false
+    
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
