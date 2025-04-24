@@ -35,6 +35,8 @@ class UserViewModel: NSObject, ObservableObject {
     var errorMessage: String?
     
     override init() {
+        super.init()
+        
         guard auth.currentUser != nil else {
             self.user = nil
             return
@@ -227,7 +229,7 @@ class UserViewModel: NSObject, ObservableObject {
     }
     
     private func loadUserFromCache() -> User? {
-        guard let savedUserData = UserDefaults.standard.data(forKey: userKey) else { return }
+        guard let savedUserData = UserDefaults.standard.data(forKey: userKey) else { return nil }
         print("SUCCESS: Cached user loaded")
         return try? JSONDecoder().decode(User.self, from: savedUserData)
     }
