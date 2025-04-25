@@ -32,7 +32,7 @@ struct HeartRateCard: View {
         }
         .padding()
         .frame(width: 165, height: 165)
-        .background(Color(red: 1.0, green: 0.94, blue: 0.94))
+        .background(Color.stresspeach)
         .cornerRadius(20)
     }
 }

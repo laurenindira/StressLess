@@ -31,7 +31,7 @@ struct HRVCard: View {
         }
         .padding()
         .frame(width: 165, height: 165)
-        .background(Color(red: 0.98, green: 0.90, blue: 0.96))
+        .background(Color.stresspink)
         .cornerRadius(20)
     }
 }
