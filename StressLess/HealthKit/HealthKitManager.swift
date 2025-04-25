@@ -46,6 +46,7 @@ class HealthKitManager: ObservableObject {
         }
     }
 
+    // TODO: don't need step counting, but will eventually change to HRV
     func readStepCountToday() {
         guard let stepCountType = HKQuantityType.quantityType(forIdentifier: .stepCount) else {
             return

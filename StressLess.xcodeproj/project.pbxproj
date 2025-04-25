@@ -51,6 +51,8 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"GoogleService-Info.plist",
+				HealthKit/HealthKitManager.swift,
+				HealthKit/HeartRateViewModel.swift,
 			);
 			target = A5408B772DB832BD005A57A9 /* StressLess Watch App */;
 		};
@@ -391,6 +393,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = StressLess;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "To read the health data and show in application";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = lmu.serenity.StressLess;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -422,6 +425,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = StressLess;
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "To read the health data and show in application";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = lmu.serenity.StressLess;
 				LD_RUNPATH_SEARCH_PATHS = (
