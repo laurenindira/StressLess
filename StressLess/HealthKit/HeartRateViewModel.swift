@@ -14,6 +14,7 @@ class HeartRateViewModel: ObservableObject {
     private let heartRateUnit = HKUnit(from: "count/min")
 
     @Published var bpm: Int = 0
+    @Published var hrv: Double = 0.0 // in milliseconds
 
     init() {
         requestAuthorization()
@@ -32,12 +33,14 @@ class HeartRateViewModel: ObservableObject {
             if success {
                 print("HealthKit authorization granted.")
                 self.startHeartRateQuery()
+                self.fetchLatestHRV()
             } else {
                 print("Authorization failed: \(error?.localizedDescription ?? "Unknown error")")
             }
         }
     }
 
+    // heart rate
     private func startHeartRateQuery() {
         let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate)!
         let devicePredicate = HKQuery.predicateForObjects(from: [HKDevice.local()])
@@ -65,5 +68,35 @@ class HeartRateViewModel: ObservableObject {
         query.updateHandler = updateHandler
         healthStore.execute(query)
     }
+    
+    // heart rate variability
+    func fetchLatestHRV() {
+        guard let hrvType = HKQuantityType.quantityType(forIdentifier: .heartRateVariabilitySDNN) else {
+            print("HRV type not available")
+            return
+        }
+
+        let now = Date()
+        let startOfDay = Calendar.current.startOfDay(for: now)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now)
+
+        let query = HKStatisticsQuery(quantityType: hrvType, quantitySamplePredicate: predicate, options: .discreteMostRecent) { _, result, error in
+            guard let result = result,
+                  let quantity = result.mostRecentQuantity() else {
+                print("Could not fetch HRV: \(error?.localizedDescription ?? "No data")")
+                return
+            }
+
+            let value = quantity.doubleValue(for: HKUnit.secondUnit(with: .milli))
+
+            DispatchQueue.main.async {
+                self.hrv = value
+                print("HRV: \(value) ms")
+            }
+        }
+
+        healthStore.execute(query)
+    }
+
 }
 

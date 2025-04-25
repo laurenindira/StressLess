@@ -5,6 +5,7 @@
 //  Created by Raihana Zahra on 4/24/25.
 //
 // medium.com/@kevinbryanreligion/the-most-straight-forward-tutorial-on-how-to-use-healthkit-for-swiftui-a59bce6b2e96
+// NOT USED
 
 import Foundation
 import HealthKit
