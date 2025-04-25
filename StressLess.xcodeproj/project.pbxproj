@@ -51,7 +51,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				"GoogleService-Info.plist",
-				HealthKit/HealthKitManager.swift,
 				HealthKit/HeartRateViewModel.swift,
 			);
 			target = A5408B772DB832BD005A57A9 /* StressLess Watch App */;

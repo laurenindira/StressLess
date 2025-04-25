@@ -4,6 +4,7 @@
 //
 //  Created by Raihana Zahra on 4/25/25.
 //
+// medium.com/@kevinbryanreligion/the-most-straight-forward-tutorial-on-how-to-use-healthkit-for-swiftui-a59bce6b2e96
 // medium.com/display-and-use-heart-rate-with-healthkit-on/display-and-use-heart-rate-with-healthkit-on-swiftui-for-watchos-2b26e29dc566
 
 import Foundation
