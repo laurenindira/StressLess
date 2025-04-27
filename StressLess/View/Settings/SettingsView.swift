@@ -10,7 +10,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject var auth: AuthViewModel
     
-    @State var notificationsOn: Bool = false
+    @AppStorage("notificationsOn") private var notificationsOn: Bool = true
     
     var body: some View {
         NavigationStack {
@@ -25,14 +25,23 @@ struct SettingsView: View {
                     Text("Notifications")
                         .font(.system(size: 25))
                         .bold()
-                    Toggle("Disable Notifications", isOn: $notificationsOn)
+                    Toggle(isOn: $notificationsOn) {
+                        Text("Disable/Enable Notifications")
+                    }
+                    .onChange(of: notificationsOn) { _, newValue in
+                        if newValue {
+                            NotificationManager.requestNotificationAuthorization()
+                        } else {
+                            NotificationManager.cancelNotification()
+                        }
+                    }
                 }
                 
                 Divider()
                 
                 //HEALTH DATA
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Notifications")
+                    Text("Health Data")
                         .font(.system(size: 25))
                         .bold()
                     Button {
