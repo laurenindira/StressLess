@@ -29,8 +29,8 @@ struct HealthKitOnboarding: View {
             } label: {
                 GenButton(text: "Next", backgroundColor: Color.prim, textColor: Color.lod, isSystemImage: true,  imageRight: "arrow.right")
             }
-            .disabled(user.averageHeartRate == 0)
-            .opacity((user.averageHeartRate == 0) ? 0.5 : 1)
+            .disabled(user.averageHeartRate == 0.0)
+            .opacity((user.averageHeartRate == 0.0) ? 0.5 : 1)
             .padding(.top, 20)
             
         }

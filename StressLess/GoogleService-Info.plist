@@ -2,10 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSHealthShareUsageDescription</key>
-	<string>StressLess needs to access your heart rate and heart rate variability in order to monitor stress levels and provide relevant insights.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>StressLess needs to access your heart rate and heart rate variability in order to monitor stress levels and provide relevant insights.</string>
 	<key>CLIENT_ID</key>
 	<string>1012107354847-bhindc46avua5ohahcj7hdaed7ktunuu.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
