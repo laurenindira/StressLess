@@ -21,6 +21,8 @@ class HeartRateViewModel: ObservableObject {
     
     private var healthStore = HKHealthStore()
     private let heartRateUnit = HKUnit(from: "count/min")
+    private let hrvUnit = HKUnit.secondUnit(with: .milli)
+    private var lastNotificationDate: Date? = nil
     
     let stressThreshold = 100 // change to bpm we decide
 
@@ -44,7 +46,7 @@ class HeartRateViewModel: ObservableObject {
             if success {
                 print("HealthKit authorization granted.")
                 self.startHeartRateQuery()
-                self.fetchLatestHRV()
+                self.startHRVQuery()
             } else {
                 print("Authorization failed: \(error?.localizedDescription ?? "Unknown error")")
             }
@@ -78,33 +80,29 @@ class HeartRateViewModel: ObservableObject {
     }
     
     // heart rate variability
-    func fetchLatestHRV() {
-        guard let hrvType = HKQuantityType.quantityType(forIdentifier: .heartRateVariabilitySDNN) else {
-            print("HRV type not available")
-            return
-        }
+    private func startHRVQuery() {
+            let hrvType = HKQuantityType.quantityType(forIdentifier: .heartRateVariabilitySDNN)!
+            let devicePredicate = HKQuery.predicateForObjects(from: [HKDevice.local()])
 
-        let now = Date()
-        let startOfDay = Calendar.current.startOfDay(for: now)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now)
+            let updateHandler: (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void = { _, samples, _, _, _ in
+                guard let samples = samples as? [HKQuantitySample] else { return }
 
-        let query = HKStatisticsQuery(quantityType: hrvType, quantitySamplePredicate: predicate, options: .mostRecent) { _, result, error in
-            guard let result = result,
-                  let quantity = result.mostRecentQuantity() else {
-                print("Could not fetch HRV: \(error?.localizedDescription ?? "No data")")
-                return
+                DispatchQueue.main.async {
+                    self.processHRV(samples)
+                }
             }
 
-            let value = quantity.doubleValue(for: HKUnit.secondUnit(with: .milli))
+            let query = HKAnchoredObjectQuery(
+                type: hrvType,
+                predicate: devicePredicate,
+                anchor: nil,
+                limit: HKObjectQueryNoLimit,
+                resultsHandler: updateHandler
+            )
 
-            DispatchQueue.main.async {
-                self.hrv = value
-                print("HRV: \(value) ms")
-            }
+            query.updateHandler = updateHandler
+            healthStore.execute(query)
         }
-
-        healthStore.execute(query)
-    }
     
     // threshold for heart rate
     private func process(_ samples: [HKQuantitySample]) {
@@ -118,39 +116,60 @@ class HeartRateViewModel: ObservableObject {
                 self.heartRateHistory.removeFirst()
             }
 
-            // Check if above threshold
+            // check if above threshold
             if currentBPM >= stressThreshold {
-                print("Stress Alert: BPM = \(currentBPM)")
-                //  TODO: add vibration/notification + display on watch
-                NotificationManager.scheduleNotification()
+                let now = Date()
+                if let lastNotification = lastNotificationDate {
+                    let timeSinceLast = now.timeIntervalSince(lastNotification)
+                    if timeSinceLast >= 300 { // 5 minutes
+                        NotificationManager.scheduleNotification()
+                        lastNotificationDate = now
+                        print("Stress Alert Sent (after waiting). BPM = \(currentBPM)")
+                    } else {
+                        print("Stress detected but not sending notification yet (waiting). BPM = \(currentBPM)")
+                    }
+                } else {
+                    // first time sending notification
+                    NotificationManager.scheduleNotification()
+                    lastNotificationDate = now
+                    print("First Stress Alert Sent. BPM = \(currentBPM)")
+                }
             }
         }
     }
     
-    // simulate fake heart rate + hrv
-    private func simulateFakeHeartRate() {
-        #if targetEnvironment(simulator)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            let fakeBPM = 120
-            self.bpm = fakeBPM
-            self.lastBPM = fakeBPM
-            self.heartRateHistory.append(fakeBPM)
+    // MAYBE threshold for hrv
+    private func processHRV(_ samples: [HKQuantitySample]) {
+            for sample in samples {
+                let currentHRV = sample.quantity.doubleValue(for: hrvUnit)
+                self.hrv = currentHRV
 
-            print("Simulator: Fake BPM = \(fakeBPM)")
-
-            let fakeHRV = 50.0
-            self.hrv = fakeHRV
-//            self.lastHRV = fakeHRV
-//            self.hrvHistory.append(fakeHRV)
-
-            print("Simulator: Fake HRV = \(fakeHRV) ms")
-
-            if fakeBPM >= self.stressThreshold {
-                NotificationManager.scheduleNotification()
+                print("Updated HRV: \(currentHRV) ms")
             }
         }
-        #endif
-    }
+    
+    // simulate fake heart rate + hrv
+    private func simulateFakeHeartRate() {
+            #if targetEnvironment(simulator)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                let fakeBPM = 120
+                self.bpm = fakeBPM
+                self.lastBPM = fakeBPM
+                self.heartRateHistory.append(fakeBPM)
+
+                print("Simulator: Fake BPM = \(fakeBPM)")
+
+                let fakeHRV = 50.0
+                self.hrv = fakeHRV
+
+                print("Simulator: Fake HRV = \(fakeHRV) ms")
+
+                if fakeBPM >= self.stressThreshold {
+                    NotificationManager.scheduleNotification()
+                }
+            }
+            #endif
+        }
 
 }
 
