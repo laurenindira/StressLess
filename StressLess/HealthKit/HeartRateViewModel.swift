@@ -118,6 +118,7 @@ class HeartRateViewModel: ObservableObject {
             if currentBPM >= stressThreshold {
                 print("Stress Alert: BPM = \(currentBPM)")
                 //  TODO: add vibration/notification + display on watch
+                NotificationManager.scheduleNotification()
             }
         }
     }
