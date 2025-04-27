@@ -12,8 +12,8 @@ import FirebaseFirestore
 import GoogleSignIn
 
 @Observable
-class UserViewModel: NSObject, ObservableObject {
-    static var shared = UserViewModel()
+class AuthViewModel: NSObject, ObservableObject {
+    static var shared = AuthViewModel()
     
     var user: User? {
         didSet {
@@ -42,7 +42,7 @@ class UserViewModel: NSObject, ObservableObject {
             return
         }
         
-        if let savedUserData = UserDefaults.standard.data(forKey: userKey),
+        if let savedUserData = UserDefaults.standard.data(forKey: "cachedUser"),
            let savedUser = try? JSONDecoder().decode(User.self, from: savedUserData) {
             self.user = savedUser
             UserDefaults.standard.set(true, forKey: "isSignedIn")
@@ -109,93 +109,88 @@ class UserViewModel: NSObject, ObservableObject {
     }
     //TODO: FIX
     
-//    func deleteAccount() async {
-//        guard let user = auth.currentUser else { return }
-//        var credential: AuthCredential
-//        
-//        self.isLoading = true
-//        
-//        user.delete { error in
-//            if let error = error {
-//                self.isLoading = false
-//                
-//                if (error as NSError).code == AuthErrorCode.requiresRecentLogin.rawValue {
-//                    print("ERROR: Re-authentication required")
-//                    self.promptReauthentication() { reauthError in
-//                        if let reauthError = reauthError {
-//                            print("ERROR: Failed to re-authenticate")
-//                            return
-//                        } else {
-//                            self.user = nil
-//                            clearUserCache()
-//                        }
-//                    }
-//                    
-//                } else {
-//                    print("ERROR: \(error.localizedDescription)")
-//                    return
-//                }
-//            } else {
-//                
-//                print("SUCCESS: Account deleted")
-//            }
-//        }
-//    }
-//    
-//    private func promptReauthentication() {
-//        
-//    }
+    func deleteAccount(completion: @escaping (Error?) -> Void) async throws {
+        guard let currentUser = auth.currentUser else {
+            completion(NSError(domain: "UserNotLoggedIn", code: 0, userInfo: [NSLocalizedDescriptionKey: "No user is currently logged in."]))
+            return
+        }
+        
+        guard let localUser = self.user else { return }
     
-    //TODO: this is untested, make sure it works later on
-//    func deleteUserAccount(completion: @escaping (Error?) -> Void) async throws {
-//        guard let user = auth.currentUser else {
-//            completion(NSError(domain: "UserNotLoggedIn", code: 0, userInfo: [NSLocalizedDescriptionKey: "No user is currently logged in"]))
-//            return
-//        }
-//        
-//        isLoading = true
-//        
-//        let userID = user.uid
-//        let userRef = db.collection("users").document(userID)
-//        
-//        do {
-//            try await userRef.delete()
-//            print("SUCCESS: User removed from collection")
-//            
-//            user.delete { error in
-//                if let error = error {
-//                    self.isLoading = false
-//                    if (error as NSError) == AuthErrorCode.requiresRecentLogin.rawValue {
-//                        print("ERROR: Re-authentication required")
-//                        self.promptReauthentication() { reauthError in
-//                            if let reauthError = reauthError {
-//                                print("ERROR: Failed to re-authenticate user: \(reauthError.localizedDescription)")
-//                                completion(reauthError)
-//                            } else {
-//                                self.user = nil
-//                                UserDefaults.standard.set(false, forKey: "isSignedIn")
-//                                clearUserCache()
-//                                completion(nil)
-//                            }
-//                        }
-//                    } else let error as NSError {
-//                        self.errorMessage = String(describing: error.localizedDescription)
-//                        print("ERROR: Failed to delete account - \(errorMessage)")
-//                        completion(error)
-//                    }
-//                }
-//            } else {
-//                self.user = nil
-//                UserDefaults.standard.set(false, forKey: "isSignedIn")
-//                completion(nil)
-//            }
-//        } catch let error as NSError {
-//            self.isLoading = false
-//            self.errorMessage = String(describing: error.localizedDescription)
-//            print("ERROR: Failed to delete account - \(errorMessage)")
-//            completion(error)
-//        }
-//    }
+        self.isLoading = true
+        
+        currentUser.delete { error in
+            if let error = error {
+                if (error as NSError).code == AuthErrorCode.requiresRecentLogin.rawValue {
+                    print("ERROR: Re-authentication required")
+                    if localUser.providerRef == "password" {
+                        self.promptEmailReauthentication(currentUser: localUser) { reauthError in
+                            if let reauthError = reauthError {
+                                self.isLoading = false
+                                print("ERROR: Failed to re-authenticate: \(reauthError.localizedDescription)")
+                                completion(reauthError)
+                            } else {
+                                self.clearUserCache()
+                                self.user = nil
+                                self.isLoading = false
+                                completion(nil)
+                            }
+                        }
+                    } else {
+                        //TODO: gmail reauth
+                    }
+                } else {
+                    self.isLoading = false
+                    print("ERROR: \(error.localizedDescription)")
+                    completion(error)
+                }
+            } else {
+                //account deleted
+                self.clearUserCache()
+                self.user = nil
+                self.isLoading = false
+                completion(nil)
+            }
+        }
+        
+    }
+    
+    private func promptEmailReauthentication(currentUser: User, completion: @escaping (Error?) -> Void) {
+        if currentUser.email.isEmpty {
+            completion(NSError(domain: "MissingEmail", code: 0, userInfo: [NSLocalizedDescriptionKey: "Email is missing for re-authentication."]))
+            return
+        }
+        
+        let alertController = UIAlertController(
+            title: "Re-authenticate Account",
+            message: "Please re-enter your password to authenticate your account.",
+            preferredStyle: .alert
+        )
+        
+        alertController.addTextField { textField in
+            textField.placeholder = "Password"
+            textField.isSecureTextEntry = true
+        }
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
+            completion(NSError(domain: "ReauthenticationCanceled", code: 0, userInfo: [NSLocalizedDescriptionKey: "Re-authentication was cancelled by the user."]))
+        }))
+        
+        alertController.addAction(UIAlertAction(title: "Confirm", style: .default, handler: { _ in
+            if let password = alertController.textFields?.first?.text, !password.isEmpty {
+                let credential = EmailAuthProvider.credential(withEmail: currentUser.email, password: password)
+                Auth.auth().currentUser?.reauthenticate(with: credential) { _, error in
+                    completion(error)
+                }
+            } else {
+                completion(NSError(domain: "InvalidPassword", code: 0, userInfo: [NSLocalizedDescriptionKey: "Password is required for re-authentication."]))
+            }
+        }))
+        
+        if let rootViewController = UIApplication.shared.windows.first?.rootViewController {
+            rootViewController.present(alertController, animated: true)
+        }
+    }
     
     //MARK: - Loading User
     private func loadSession() async {
@@ -224,7 +219,7 @@ class UserViewModel: NSObject, ObservableObject {
             }
         } catch let error as NSError {
             self.errorMessage = String(describing: error.localizedDescription)
-            print("ERROR: Cannot load user - \(errorMessage)")
+            print("ERROR: Cannot load user - \(String(describing: errorMessage))")
         }
     }
     
@@ -253,4 +248,8 @@ class UserViewModel: NSObject, ObservableObject {
         UserDefaults.standard.removeObject(forKey: userKey)
         UserDefaults.standard.set(false, forKey: "isSignedIn")
     }
+}
+
+protocol AuthenticationFormProtocol {
+    var formIsValid: Bool { get }
 }
