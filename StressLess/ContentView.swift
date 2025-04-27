@@ -8,17 +8,40 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var auth: AuthViewModel
+    @AppStorage("isSignedIn") var isSignedIn = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        Group {
+            if !isSignedIn {
+                SplashView()
+                    .environmentObject(auth)
+            } else {
+                TabView {
+                    OverviewView()
+                        .environmentObject(auth)
+                        .tabItem {
+                            Label("Overview", systemImage: "square.grid.2x2")
+                        }
+                    
+                    TrendsView()
+                        .environmentObject(auth)
+                        .tabItem {
+                            Label("Trends", systemImage: "chart.line.uptrend.xyaxis")
+                        }
+                    
+                    ProfileView()
+                        .environmentObject(auth)
+                        .tabItem {
+                            Label("Profile", systemImage: "person.fill")
+                        }
+                }
+            }
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(AuthViewModel())
 }
