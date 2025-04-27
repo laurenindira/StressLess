@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OverviewView: View {
     @EnvironmentObject var auth: AuthViewModel
+    @StateObject private var heartRateVM = HeartRateViewModel()
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()

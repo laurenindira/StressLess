@@ -140,13 +140,13 @@ class HeartRateViewModel: ObservableObject {
     
     // MAYBE threshold for hrv
     private func processHRV(_ samples: [HKQuantitySample]) {
-            for sample in samples {
-                let currentHRV = sample.quantity.doubleValue(for: hrvUnit)
-                self.hrv = currentHRV
+        for sample in samples {
+            let currentHRV = sample.quantity.doubleValue(for: hrvUnit)
+            self.hrv = currentHRV
 
-                print("Updated HRV: \(currentHRV) ms")
-            }
+            print("Updated HRV: \(currentHRV) ms")
         }
+    }
     
     // simulate fake heart rate + hrv
     private func simulateFakeHeartRate() {
