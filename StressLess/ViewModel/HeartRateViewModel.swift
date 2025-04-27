@@ -81,28 +81,28 @@ class HeartRateViewModel: ObservableObject {
     
     // heart rate variability
     private func startHRVQuery() {
-            let hrvType = HKQuantityType.quantityType(forIdentifier: .heartRateVariabilitySDNN)!
-            let devicePredicate = HKQuery.predicateForObjects(from: [HKDevice.local()])
+        let hrvType = HKQuantityType.quantityType(forIdentifier: .heartRateVariabilitySDNN)!
+        let devicePredicate = HKQuery.predicateForObjects(from: [HKDevice.local()])
 
-            let updateHandler: (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void = { _, samples, _, _, _ in
-                guard let samples = samples as? [HKQuantitySample] else { return }
+        let updateHandler: (HKAnchoredObjectQuery, [HKSample]?, [HKDeletedObject]?, HKQueryAnchor?, Error?) -> Void = { _, samples, _, _, _ in
+            guard let samples = samples as? [HKQuantitySample] else { return }
 
-                DispatchQueue.main.async {
-                    self.processHRV(samples)
-                }
+            DispatchQueue.main.async {
+                self.processHRV(samples)
             }
-
-            let query = HKAnchoredObjectQuery(
-                type: hrvType,
-                predicate: devicePredicate,
-                anchor: nil,
-                limit: HKObjectQueryNoLimit,
-                resultsHandler: updateHandler
-            )
-
-            query.updateHandler = updateHandler
-            healthStore.execute(query)
         }
+
+        let query = HKAnchoredObjectQuery(
+            type: hrvType,
+            predicate: devicePredicate,
+            anchor: nil,
+            limit: HKObjectQueryNoLimit,
+            resultsHandler: updateHandler
+        )
+
+        query.updateHandler = updateHandler
+        healthStore.execute(query)
+    }
     
     // threshold for heart rate
     private func process(_ samples: [HKQuantitySample]) {
@@ -150,26 +150,25 @@ class HeartRateViewModel: ObservableObject {
     
     // simulate fake heart rate + hrv
     private func simulateFakeHeartRate() {
-            #if targetEnvironment(simulator)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                let fakeBPM = 120
-                self.bpm = fakeBPM
-                self.lastBPM = fakeBPM
-                self.heartRateHistory.append(fakeBPM)
+        #if targetEnvironment(simulator)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let fakeBPM = 120
+            self.bpm = fakeBPM
+            self.lastBPM = fakeBPM
+            self.heartRateHistory.append(fakeBPM)
 
-                print("Simulator: Fake BPM = \(fakeBPM)")
+            print("Simulator: Fake BPM = \(fakeBPM)")
 
-                let fakeHRV = 50.0
-                self.hrv = fakeHRV
+            let fakeHRV = 50.0
+            self.hrv = fakeHRV
 
-                print("Simulator: Fake HRV = \(fakeHRV) ms")
+            print("Simulator: Fake HRV = \(fakeHRV) ms")
 
-                if fakeBPM >= self.stressThreshold {
-                    NotificationManager.scheduleNotification()
-                }
+            if fakeBPM >= self.stressThreshold {
+                NotificationManager.scheduleNotification()
             }
-            #endif
         }
-
+        #endif
+    }
 }
 
