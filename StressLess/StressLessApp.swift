@@ -12,10 +12,12 @@ struct StressLessApp: App {
     @UIApplicationDelegateAdaptor(StressLessAppDelegate.self) var appDelegate
     @AppStorage("isSignedIn") var isSignedIn = false
     
+    @StateObject private var auth = AuthViewModel.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(auth)
         }
     }
 }
