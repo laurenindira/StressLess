@@ -12,7 +12,23 @@ struct NameInputOnboarding: View {
     @Binding var step: Int
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack(alignment: .leading) {
+            Text("So, what do you want us to call you?")
+                .font(.headline)
+            
+            GenTextField(placeholder: "enter your name", text: $user.displayName)
+            
+            Button {
+                if !user.displayName.isEmpty { step += 1 }
+            } label: {
+                GenButton(text: "Next", backgroundColor: Color.prim, textColor: Color.lod, isSystemImage: true,  imageRight: "arrow.right")
+            }
+            .disabled(user.displayName.isEmpty)
+            .opacity((user.displayName == "") ? 0.5 : 1)
+            .padding(.top, 20)
+            
+        }
+        .padding()
     }
 }
 

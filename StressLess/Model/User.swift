@@ -21,7 +21,7 @@ struct User: Identifiable, Codable {
     
     //TRACKING
     var totalSessions: Int
-    var averageHeartRate: Int
-    var averageHRV: Int
+    var averageHeartRate: Double
+    var averageHRV: Double
     var lastSession: Date?
 }
