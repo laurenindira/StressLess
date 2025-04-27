@@ -19,9 +19,23 @@ struct ContentView: View {
                     .environmentObject(auth)
             } else {
                 TabView {
-                    //dashboard
-                    //trends
-                    //profile
+                    OverviewView()
+                        .environmentObject(auth)
+                        .tabItem {
+                            Label("Overview", systemImage: "square.grid.2x2")
+                        }
+                    
+                    TrendsView()
+                        .environmentObject(auth)
+                        .tabItem {
+                            Label("Trends", systemImage: "chart.line.uptrend.xyaxis")
+                        }
+                    
+                    ProfileView()
+                        .environmentObject(auth)
+                        .tabItem {
+                            Label("Profile", systemImage: "person.fill")
+                        }
                 }
             }
         }

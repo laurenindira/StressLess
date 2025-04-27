@@ -19,14 +19,15 @@ struct SquareWidget: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 40) {
             Text(mainText)
-                .font(.system(size: 28))
+                .font(.system(size: 24))
                 .bold()
             
             HStack {
                 Image(systemName: icon)
-                    .font(.system(size: 45))
+                    .font(.system(size: 35))
+                    .padding(.trailing, 20)
                 Text(value)
-                    .font(.system(size: 28))
+                    .font(.system(size: 24))
                 Text(measurement ?? "")
                     .font(.system(size: 16))
             }

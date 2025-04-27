@@ -53,11 +53,11 @@ struct OverviewView: View {
                         .bold()
                     HStack (spacing: 20) {
                         SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(describing: auth.user?.averageHeartRate ?? 0) , measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
-                        SquareWidget(mainText: "Last Session", icon: "calendar", value: dateFormatter.string(from:  auth.user?.lastSession ?? Date()) , space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressyellow)
+                        SquareWidget(mainText: "Last Study Session", icon: "calendar", value: dateFormatter.string(from:  auth.user?.lastSession ?? Date()) , space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressyellow)
                     }
                     
                     HStack (spacing: 20) {
-                        SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(describing: auth.user?.averageHRV ?? 0) , measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
+                        SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(describing: auth.user?.averageHRV ?? 0) , measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
                         NavigationLink {
                             //TODO: add nav link
                         } label: {
@@ -80,13 +80,6 @@ struct OverviewView: View {
             }
             .padding()
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Image(systemName: "gear")
-                        .font(.title3)
-                        .foregroundStyle(Color.dol)
-                }
-            }
             .background {
                 Color.back
                     .ignoresSafeArea()
