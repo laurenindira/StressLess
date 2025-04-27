@@ -12,7 +12,14 @@ struct DataSourceOnboarding: View {
     @Binding var step: Int
     
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        VStack {
+            Button {
+                step += 1
+            } label: {
+                GenButton(text: "Next", backgroundColor: Color.prim, textColor: Color.lod, isSystemImage: true,  imageRight: "arrow.right")
+            }
+        }
+        .padding()
     }
 }
 

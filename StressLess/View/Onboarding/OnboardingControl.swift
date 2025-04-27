@@ -19,9 +19,7 @@ struct OnboardingControl: View {
             } else if step == 2 {
                 DataSourceOnboarding(user: $user, step: $step)
             } else if step == 3 {
-                HeartRateOnboarding(user: $user, step: $step)
-            } else if step == 4 {
-                HRVOnboarding(user: $user, step: $step)
+                HealthKitOnboarding(user: $user, step: $step)
             }
             
             

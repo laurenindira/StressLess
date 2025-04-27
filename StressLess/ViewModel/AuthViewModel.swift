@@ -79,7 +79,8 @@ class AuthViewModel: NSObject, ObservableObject {
                 "goals": user.goals,
                 "totalSessions": user.totalSessions,
                 "averageHeartRate": user.averageHeartRate,
-                "averageHRV": user.averageHRV
+                "averageHRV": user.averageHRV,
+                "lastSession": user.lastSession ?? Date()
             ])
             print("SUCCESS: Saved user to Firestore")
         } catch let error as NSError {
