@@ -10,6 +10,7 @@
 import Foundation
 import HealthKit
 import SwiftUI
+import UserNotifications
 
 class HeartRateViewModel: ObservableObject {
     @AppStorage("lastBPM") private var lastBPM: Int = 0
@@ -25,6 +26,7 @@ class HeartRateViewModel: ObservableObject {
 
     init() {
         requestAuthorization()
+        simulateFakeHeartRate()
     }
 
     private func requestAuthorization() {
@@ -122,5 +124,24 @@ class HeartRateViewModel: ObservableObject {
             }
         }
     }
+    
+    // simulate fake heart rate
+    private func simulateFakeHeartRate() {
+        #if targetEnvironment(simulator)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let fakeBPM = 120 // Fake high BPM for testing
+            self.bpm = fakeBPM
+            self.lastBPM = fakeBPM
+            self.heartRateHistory.append(fakeBPM)
+
+            print("Simulator: Fake BPM = \(fakeBPM)")
+
+            if fakeBPM >= self.stressThreshold {
+                NotificationManager.scheduleNotification()
+            }
+        }
+        #endif
+    }
+
 }
 

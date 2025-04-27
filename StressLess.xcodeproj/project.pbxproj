@@ -52,6 +52,7 @@
 			membershipExceptions = (
 				"GoogleService-Info.plist",
 				HealthKit/HeartRateViewModel.swift,
+				Service/NotificationManager.swift,
 			);
 			target = A5408B772DB832BD005A57A9 /* StressLess Watch App */;
 		};
