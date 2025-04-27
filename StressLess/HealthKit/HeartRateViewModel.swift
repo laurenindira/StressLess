@@ -35,8 +35,10 @@ class HeartRateViewModel: ObservableObject {
             return
         }
 
-        let heartRateType = HKQuantityType.quantityType(forIdentifier: .heartRate)!
-        let typesToRead: Set = [heartRateType]
+        let typesToRead: Set = [
+            HKObjectType.quantityType(forIdentifier: .heartRate)!,
+            HKObjectType.quantityType(forIdentifier: .heartRateVariabilitySDNN)!
+        ]
 
         healthStore.requestAuthorization(toShare: nil, read: typesToRead) { success, error in
             if success {
@@ -125,16 +127,23 @@ class HeartRateViewModel: ObservableObject {
         }
     }
     
-    // simulate fake heart rate
+    // simulate fake heart rate + hrv
     private func simulateFakeHeartRate() {
         #if targetEnvironment(simulator)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            let fakeBPM = 120 // Fake high BPM for testing
+            let fakeBPM = 120
             self.bpm = fakeBPM
             self.lastBPM = fakeBPM
             self.heartRateHistory.append(fakeBPM)
 
             print("Simulator: Fake BPM = \(fakeBPM)")
+
+            let fakeHRV = 50.0
+            self.hrv = fakeHRV
+//            self.lastHRV = fakeHRV
+//            self.hrvHistory.append(fakeHRV)
+
+            print("Simulator: Fake HRV = \(fakeHRV) ms")
 
             if fakeBPM >= self.stressThreshold {
                 NotificationManager.scheduleNotification()

@@ -29,7 +29,13 @@ struct NotificationManager {
 
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: nil)
 
-        UNUserNotificationCenter.current().add(request)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("ERROR: Failed to send notification: \(error.localizedDescription)")
+            } else {
+                print("SUCCESS: Notification sent successfully.")
+            }
+        }
     }
 
     static func cancelNotification() {
