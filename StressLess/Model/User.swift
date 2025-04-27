@@ -23,4 +23,5 @@ struct User: Identifiable, Codable {
     var totalSessions: Int
     var averageHeartRate: Int
     var averageHRV: Int
+    var lastSession: Date?
 }
