@@ -24,6 +24,10 @@ class HeartRateViewModel: ObservableObject {
     private let hrvUnit = HKUnit.secondUnit(with: .milli)
     private var lastNotificationDate: Date? = nil
     
+    static let shared = HeartRateViewModel()
+    private var heartRateQuery: HKAnchoredObjectQuery?
+    private var hrvQuery: HKAnchoredObjectQuery?
+    
     let stressThreshold = 100 // change to bpm we decide
 
     init() {
@@ -45,8 +49,7 @@ class HeartRateViewModel: ObservableObject {
         healthStore.requestAuthorization(toShare: nil, read: typesToRead) { success, error in
             if success {
                 print("HealthKit authorization granted.")
-                self.startHeartRateQuery()
-                self.startHRVQuery()
+                // don't start querying yet
             } else {
                 print("Authorization failed: \(error?.localizedDescription ?? "Unknown error")")
             }
@@ -146,6 +149,23 @@ class HeartRateViewModel: ObservableObject {
 
             print("Updated HRV: \(currentHRV) ms")
         }
+    }
+    
+    // start/stop session
+    func startMonitoring() {
+        startHeartRateQuery()
+        startHRVQuery()
+        print("Started HealthKit Monitoring.")
+    }
+    
+    func stopMonitoring() {
+        if let query = heartRateQuery {
+            healthStore.stop(query)
+        }
+        if let query = hrvQuery {
+            healthStore.stop(query)
+        }
+        print("Stopped HealthKit Monitoring.")
     }
     
     // simulate fake heart rate + hrv

@@ -9,9 +9,10 @@ import SwiftUI
 
 struct SessionView: View {
     @EnvironmentObject var auth: AuthViewModel
+    @StateObject var sessionManager = SessionManager.shared
     
-    @State var sessionOngoing: Bool
-    @State var sessionTime: Int
+//    @State var sessionOngoing: Bool
+//    @State var sessionTime: Int
     
     var body: some View {
         NavigationStack {
@@ -34,6 +35,23 @@ struct SessionView: View {
                     .font(.system(size: 30))
                     
                     //TODO: add button once this session thing is figured out
+                    Button(action: {
+                        if sessionManager.isSessionActive {
+                            sessionManager.stopSession()
+                        } else {
+                            sessionManager.startSession()
+                        }
+                    }) {
+                        Text(sessionManager.isSessionActive ? "Stop Session (\(formatTime(sessionManager.elapsedSeconds)))" : "Start Session")
+                            .font(.title2)
+                            .bold()
+                            .foregroundColor(.black)
+                            .frame(maxWidth: .infinity, minHeight: 100)
+                            .background(sessionManager.isSessionActive ? Color.stressred : Color.stressgreen)
+                            .cornerRadius(20)
+                    }
+                    .padding(.vertical)
+
                     
                     HStack {
                         SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(describing: auth.user?.averageHeartRate ?? 0) , measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
@@ -57,9 +75,16 @@ struct SessionView: View {
             }
         }
     }
+    
+    // functions
+    private func formatTime(_ seconds: Int) -> String {
+        let minutes = seconds / 60
+        let seconds = seconds % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 }
 
 #Preview {
-    SessionView(sessionOngoing: true, sessionTime: 688)
+    SessionView()
         .environmentObject(AuthViewModel())
 }
