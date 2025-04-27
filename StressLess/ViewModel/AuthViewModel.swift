@@ -91,6 +91,23 @@ class AuthViewModel: NSObject, ObservableObject {
     }
     
     //MARK: - Sign in
+    func signInWithEmail(email: String, password: String) async throws {
+        self.isLoading = true
+        
+        do {
+            let result = try await auth.signIn(withEmail: email, password: password)
+            await loadUserFromFirebase()
+            UserDefaults.standard.set(true, forKey: "isSignedIn")
+            updateCachedUser(user: self.user!)
+            self.isLoading = false
+        } catch let error as NSError {
+            self.isLoading = false
+            self.errorMessage = error.localizedDescription
+            print("ERROR: Sign in failure - \(String(describing: errorMessage))")
+            throw error
+        }
+        
+    }
     
     //MARK: - Sign out + deletion
     func signOut() async {
@@ -106,7 +123,6 @@ class AuthViewModel: NSObject, ObservableObject {
             print("ERROR: Sign out error - \(String(describing: errorMessage))")
         }
     }
-    //TODO: FIX
     
     func deleteAccount(completion: @escaping (Error?) -> Void) async throws {
         guard let currentUser = auth.currentUser else {
@@ -137,6 +153,7 @@ class AuthViewModel: NSObject, ObservableObject {
                         }
                     } else {
                         //TODO: gmail reauth
+                        print("gmail not implemented")
                     }
                 } else {
                     self.isLoading = false

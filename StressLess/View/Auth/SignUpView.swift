@@ -45,13 +45,13 @@ struct SignUpView: View {
                 Spacer()
                 
                 //LOGO
-                //TODO: add logou
-                Rectangle()
-                    .fill(Color.prim)
-                    .frame(width: 50, height: 50)
+                Image("logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxHeight: 100)
                 
                 Text("create an account")
-                    .font(.title2)
+                    .font(.title2).bold()
                 
                 //FIELDS
                 VStack {

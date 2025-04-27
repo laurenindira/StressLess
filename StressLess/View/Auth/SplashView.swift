@@ -14,7 +14,12 @@ struct SplashView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                //TODO: ADD LOGO HERE
+                Spacer()
+                
+                Image("logo")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxHeight: 120)
                 
                 Spacer()
                 
