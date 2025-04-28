@@ -16,9 +16,9 @@ struct OnboardingControl: View {
         VStack {
             if step == 1 {
                 NameInputOnboarding(user: $user, step: $step)
-//            } else if step == 2 {
-//                DataSourceOnboarding(user: $user, step: $step)
             } else if step == 2 {
+                GoalChoiceOnboarding(user: $user, step: $step)
+            } else if step == 3 {
                 HealthKitOnboarding(user: $user, step: $step)
             }
             

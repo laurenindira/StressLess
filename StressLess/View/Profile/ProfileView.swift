@@ -53,7 +53,6 @@ struct ProfileView: View {
                     Text(auth.user?.goals.joined(separator: ", ") ?? "No goals set")
                 }
                 .padding()
-                .frame(width: .infinity)
                 .background {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color.white)

@@ -42,6 +42,20 @@ struct HealthKitOnboarding: View {
             
         }
         .padding()
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button() {
+                    step -= 1
+                } label: {
+                    HStack {
+                        Image(systemName: "chevron.left")
+                            .font(.body)
+                        Text("Back")
+                    }
+                    .foregroundStyle(Color.prim)
+                }
+            }
+        }
     }
     
     func triggerHealthKit() async {
