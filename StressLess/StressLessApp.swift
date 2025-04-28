@@ -13,11 +13,13 @@ struct StressLessApp: App {
     @AppStorage("isSignedIn") var isSignedIn = false
     
     @StateObject private var auth = AuthViewModel.shared
+    @StateObject var healthKitManager = HealthKitViewModel.shared
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(auth)
+                .environmentObject(healthKitManager)
         }
     }
 }

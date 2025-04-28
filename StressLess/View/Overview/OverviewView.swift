@@ -9,6 +9,7 @@ import SwiftUI
 
 struct OverviewView: View {
     @EnvironmentObject var auth: AuthViewModel
+    @EnvironmentObject var healthKitManager: HealthKitViewModel
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -32,7 +33,7 @@ struct OverviewView: View {
                     HStack {
                         Spacer()
                         NavigationLink {
-                            //TODO: add link to start session
+                            SessionView()
                         } label: {
                             Text("Let's go!")
                                 .font(.title3).bold()
@@ -59,7 +60,7 @@ struct OverviewView: View {
                     HStack (spacing: 20) {
                         SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(describing: auth.user?.averageHRV ?? 0) , measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
                         NavigationLink {
-                            //TODO: add nav link
+                            //TODO: add nav link to quiz
                         } label: {
                             SquareWidget(mainText: "Assess your stress levels", icon: "arrow.right.circle", value: "", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspurple)
 
@@ -93,4 +94,5 @@ struct OverviewView: View {
 #Preview {
     OverviewView()
         .environmentObject(AuthViewModel())
+        .environmentObject(HealthKitViewModel())
 }

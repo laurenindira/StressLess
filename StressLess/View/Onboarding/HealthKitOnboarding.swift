@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct HealthKitOnboarding: View {
+    @EnvironmentObject var auth: AuthViewModel
+    @EnvironmentObject var healthKitManager: HealthKitViewModel
+    
     @Binding var user: User
     @Binding var step: Int
     
-    @StateObject var healthKitManager = HealthKitViewModel()
     @State var healthKitEnabled: Bool = false
     
     var body: some View {

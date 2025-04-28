@@ -9,6 +9,8 @@ import SwiftUI
 
 struct OnboardingControl: View {
     @EnvironmentObject var auth: AuthViewModel
+    @EnvironmentObject var healthKitManager: HealthKitViewModel
+    
     @Binding var user: User
     @State private var step: Int = 1
     
@@ -21,8 +23,6 @@ struct OnboardingControl: View {
             } else if step == 3 {
                 HealthKitOnboarding(user: $user, step: $step)
             }
-            
-            
         }
         .animation(.easeInOut, value: step)
     }
@@ -30,4 +30,6 @@ struct OnboardingControl: View {
 
 #Preview {
     OnboardingControl(user: .constant(User(id: "", displayName: "", email: "", providerRef: "", creationDate: Date(), goals: [], totalSessions: 0, averageHeartRate: 0, averageHRV: 0)))
+        .environmentObject(AuthViewModel())
+        .environmentObject(HealthKitViewModel())
 }

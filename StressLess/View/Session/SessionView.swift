@@ -9,9 +9,7 @@ import SwiftUI
 
 struct SessionView: View {
     @EnvironmentObject var auth: AuthViewModel
-    
-    @State var sessionOngoing: Bool
-    @State var sessionTime: Int
+    @EnvironmentObject var sessionManager: HealthKitViewModel
     
     var body: some View {
         NavigationStack {
@@ -33,11 +31,27 @@ struct SessionView: View {
                         .bold()
                     .font(.system(size: 30))
                     
-                    //TODO: add button once this session thing is figured out
+                    //Start/stop button
+                    if sessionManager.isSessionActive {
+                        Button {
+                            Task { await sessionManager.endSession() }
+                        } label: {
+                            GenButton(text: "End Session", backgroundColor: Color.stressred, textColor: Color.lod, isSystemImage: false)
+                        }
+                    } else {
+                        Button {
+                            sessionManager.startSession()
+                        } label: {
+                            GenButton(text: "Start Session", backgroundColor: Color.stressgreen, textColor: Color.dol, isSystemImage: false)
+                        }
+                    }
+                    
+                    Text("Session Duration: \(formatTime(sessionManager.sessionDuration))")
+                        .font(.headline)
                     
                     HStack {
-                        SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(describing: auth.user?.averageHeartRate ?? 0) , measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
-                        SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(describing: auth.user?.averageHRV ?? 0) , measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
+                        SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(format: "%.0f", sessionManager.sessionHeartRate), measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
+                        SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(format: "%.0f", sessionManager.sessionhrv), measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
                     }
                 }
                 .padding(.vertical, 20)
@@ -57,9 +71,16 @@ struct SessionView: View {
             }
         }
     }
+    
+    private func formatTime(_ seconds: TimeInterval) -> String {
+        let minutes = Int(seconds)/60
+        let secs = Int(seconds) % 60
+        return String(format: "%02d:%02d", minutes, secs)
+    }
 }
 
-#Preview {
-    SessionView(sessionOngoing: true, sessionTime: 688)
-        .environmentObject(AuthViewModel())
-}
+//#Preview {
+//    SessionView()
+//        .environmentObject(AuthViewModel())
+//        .environmentObject(HealthKitViewModel())
+//}

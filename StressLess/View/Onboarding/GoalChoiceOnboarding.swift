@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct GoalChoiceOnboarding: View {
+    @EnvironmentObject var auth: AuthViewModel
+    @EnvironmentObject var healthKitManager: HealthKitViewModel
+    
     @Binding var user: User
     @Binding var step: Int
     
@@ -71,4 +74,6 @@ struct GoalChoiceOnboarding: View {
 
 #Preview {
     GoalChoiceOnboarding(user: .constant(User(id: "", displayName: "", email: "", providerRef: "", creationDate: Date(), goals: [], totalSessions: 0, averageHeartRate: 0, averageHRV: 0)), step: .constant(1))
+        .environmentObject(AuthViewModel())
+        .environmentObject(HealthKitViewModel())
 }

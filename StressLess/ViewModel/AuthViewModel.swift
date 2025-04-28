@@ -90,6 +90,23 @@ class AuthViewModel: NSObject, ObservableObject {
         }
     }
     
+    func updateUserData(user: User) async throws {
+        guard let currentUser = self.user else { return }
+        
+        do {
+            try await db.collection("users").document(user.id).updateData([
+                "displayName": user.displayName,
+                "goals": user.goals
+            ])
+            print("SUCCESS: Document updated")
+        } catch let error as NSError {
+            self.errorMessage = error.localizedDescription
+            print("ERROR: Failure updating Firestore - \(String(describing: errorMessage))")
+        }
+        
+        await loadUserFromFirebase()
+    }
+    
     //MARK: - Sign in
     func signInWithEmail(email: String, password: String) async throws {
         self.isLoading = true
@@ -145,6 +162,7 @@ class AuthViewModel: NSObject, ObservableObject {
                                 print("ERROR: Failed to re-authenticate: \(reauthError.localizedDescription)")
                                 completion(reauthError)
                             } else {
+                                Task { await HealthKitViewModel.shared.deleteUserData(for: currentUser.uid) }
                                 self.clearUserCache()
                                 self.user = nil
                                 self.isLoading = false
@@ -162,6 +180,7 @@ class AuthViewModel: NSObject, ObservableObject {
                 }
             } else {
                 //account deleted
+                Task { await HealthKitViewModel.shared.deleteUserData(for: currentUser.uid) }
                 self.clearUserCache()
                 self.user = nil
                 self.isLoading = false

@@ -9,8 +9,11 @@ import SwiftUI
 
 struct SettingsView: View {
     @EnvironmentObject var auth: AuthViewModel
+    @EnvironmentObject var healthKitManager: HealthKitViewModel
     
     @State var notificationsOn: Bool = false
+    @State private var showDeleteConfirmation: Bool = false
+    @State private var showDeleteAccountConfirmation: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -32,11 +35,11 @@ struct SettingsView: View {
                 
                 //HEALTH DATA
                 VStack(alignment: .leading, spacing: 20) {
-                    Text("Notifications")
+                    Text("Health Data")
                         .font(.system(size: 25))
                         .bold()
                     Button {
-                        //TODO: trigger alert
+                        showDeleteConfirmation = true
                     } label: {
                         Text("Delete my data")
                             .foregroundStyle(Color.stressred)
@@ -53,8 +56,9 @@ struct SettingsView: View {
                     Button("Log out") {
                         Task { await auth.signOut() }
                     }
+                    
                     Button {
-                        //TODO: trigger delete account
+                        showDeleteAccountConfirmation = true
                     } label: {
                         Text("Delete my account")
                             .foregroundStyle(Color.stressred)
@@ -64,6 +68,30 @@ struct SettingsView: View {
                 Spacer()
             }
             .padding()
+            .alert(isPresented: $showDeleteConfirmation) {
+                Alert(title: Text("Are you sure?"), message: Text("This action will permanently delete all data associated with this account"), primaryButton: .destructive(Text("Delete")) { Task { await healthKitManager.deleteUserData(for: auth.user?.id ?? "" )} }, secondaryButton: .cancel())
+            }
+        }
+        
+        .alert(isPresented: $showDeleteAccountConfirmation) {
+            Alert(title: Text("Are you sure?"), message: Text("This action will permanently delete your account and all associated data"),
+                  primaryButton: .destructive(Text("Delete")) {
+                Task {
+                    do {
+                        try await auth.deleteAccount() { error in
+                            if let error = error {
+                                print("ERROR: Something went wrong deleting account")
+                            } else {
+                                print("SUCCESS: Account deleted")
+                            }
+                        }
+                    } catch {
+                        print("ERROR: Failed to delete account")
+                    }
+                }
+                
+            },
+                  secondaryButton: .cancel())
         }
     }
 }
@@ -71,4 +99,5 @@ struct SettingsView: View {
 #Preview {
     SettingsView()
         .environmentObject(AuthViewModel())
+        .environmentObject(HealthKitViewModel())
 }
