@@ -1,5 +1,5 @@
 {
-  "originHash" : "fc056ca7916ed818ce8cf28eaf37caf5bd27786a890a91807960ad4069819601",
+  "originHash" : "d5f8ca196c9f6347c85adc9c95408e10f5555eb339830d3f7651127f4b76b460",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -143,6 +143,15 @@
       "state" : {
         "revision" : "d72aed98f8253ec1aa9ea1141e28150f408cf17f",
         "version" : "1.29.0"
+      }
+    },
+    {
+      "identity" : "xcthealthkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/StanfordBDHG/XCTHealthKit",
+      "state" : {
+        "revision" : "550a6f5feb05d8b08a4f4a1c512701f4622bd2d4",
+        "version" : "1.1.2"
       }
     }
   ],

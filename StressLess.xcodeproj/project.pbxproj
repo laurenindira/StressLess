@@ -15,6 +15,7 @@
 		A5408C332DB839C7005A57A9 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A5408C322DB839C7005A57A9 /* FirebaseStorage */; };
 		A5408C362DB839F2005A57A9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A5408C352DB839F2005A57A9 /* GoogleSignIn */; };
 		A5408C382DB839F2005A57A9 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A5408C372DB839F2005A57A9 /* GoogleSignInSwift */; };
+		C4DF52142DBFF7E8007FC12B /* XCTHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = C4DF52132DBFF7E8007FC12B /* XCTHealthKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5408C2F2DB839C7005A57A9 /* FirebaseDatabase in Frameworks */,
+				C4DF52142DBFF7E8007FC12B /* XCTHealthKit in Frameworks */,
 				A5408C312DB839C7005A57A9 /* FirebaseFirestore in Frameworks */,
 				A5408C382DB839F2005A57A9 /* GoogleSignInSwift in Frameworks */,
 				A5408C2D2DB839C7005A57A9 /* FirebaseCore in Frameworks */,
@@ -144,6 +146,7 @@
 				A5408C322DB839C7005A57A9 /* FirebaseStorage */,
 				A5408C352DB839F2005A57A9 /* GoogleSignIn */,
 				A5408C372DB839F2005A57A9 /* GoogleSignInSwift */,
+				C4DF52132DBFF7E8007FC12B /* XCTHealthKit */,
 			);
 			productName = StressLess;
 			productReference = A5408B682DB832BC005A57A9 /* StressLess.app */;
@@ -201,6 +204,7 @@
 			packageReferences = (
 				A5408C292DB839C7005A57A9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				A5408C342DB839F2005A57A9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				C4DF52122DBFF7E8007FC12B /* XCRemoteSwiftPackageReference "XCTHealthKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A5408B692DB832BC005A57A9 /* Products */;
@@ -551,6 +555,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		C4DF52122DBFF7E8007FC12B /* XCRemoteSwiftPackageReference "XCTHealthKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/StanfordBDHG/XCTHealthKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -588,6 +600,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A5408C342DB839F2005A57A9 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		C4DF52132DBFF7E8007FC12B /* XCTHealthKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DF52122DBFF7E8007FC12B /* XCRemoteSwiftPackageReference "XCTHealthKit" */;
+			productName = XCTHealthKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
