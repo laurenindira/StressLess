@@ -41,6 +41,8 @@ class HealthKitViewModel: ObservableObject {
     private let stressHRVThreshold: Double = 30.0
     
     var errorMessage: String = ""
+    var triggerStress: Bool = false
+    
     private let db = Firestore.firestore()
     
     //simulated data
@@ -249,8 +251,12 @@ class HealthKitViewModel: ObservableObject {
                 NotificationManager.shared.sendStressNotification()
                 lastStressNotificationTime = now
                 print("Stress notification triggered. Total: \(stressEvents)")
+                self.triggerStress = true
             }
         }
+//        else {
+//            self.triggerStress = false
+//        }
     }
     
     private func saveSessionResults() async {

@@ -110,14 +110,14 @@ struct SignUpView: View {
                     }
                     .disabled(!formIsValid)
                     
-                    Text("or")
-                    
-                    Button {
-                        //TODO: add Google sign in
-                    } label: {
-                        GenButton(text: "sign up with Google", backgroundColor: Color.prim, textColor: Color.lod, isSystemImage: false)
-                    }
-                    
+//                    Text("or")
+//                    
+//                    Button {
+//                        //TODO: add Google sign in
+//                    } label: {
+//                        GenButton(text: "sign up with Google", backgroundColor: Color.prim, textColor: Color.lod, isSystemImage: false)
+//                    }
+//                    
                     HStack {
                         Text("already have an account?")
                         NavigationLink("sign in") { SignInView() }

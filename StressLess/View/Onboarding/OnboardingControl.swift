@@ -21,6 +21,8 @@ struct OnboardingControl: View {
             } else if step == 2 {
                 GoalChoiceOnboarding(user: $user, step: $step)
             } else if step == 3 {
+                NotificationPermissionOnboarding(user: $user, step: $step)
+            } else if step == 4 {
                 HealthKitOnboarding(user: $user, step: $step)
             }
         }

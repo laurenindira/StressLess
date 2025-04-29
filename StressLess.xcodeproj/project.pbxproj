@@ -54,12 +54,20 @@
 			);
 			target = A5408B772DB832BD005A57A9 /* StressLess Watch App */;
 		};
+		A5D460C72DC0CA3C0096FA0F /* Exceptions for "StressLess" folder in "StressLess" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = A5408B672DB832BC005A57A9 /* StressLess */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A5408B6A2DB832BC005A57A9 /* StressLess */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				A5D460C72DC0CA3C0096FA0F /* Exceptions for "StressLess" folder in "StressLess" target */,
 				A5408C282DB8395A005A57A9 /* Exceptions for "StressLess" folder in "StressLess Watch App" target */,
 			);
 			path = StressLess;
@@ -445,8 +453,8 @@
 				DEVELOPMENT_TEAM = 9TPA5PBLX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StressLess/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StressLess;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "StressLess needs to access your heart rate and heart rate variability in order to monitor stress levels and provide relevant insights.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -479,8 +487,8 @@
 				DEVELOPMENT_TEAM = 9TPA5PBLX8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = StressLess/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = StressLess;
-				INFOPLIST_KEY_NSHealthShareUsageDescription = "StressLess needs to access your heart rate and heart rate variability in order to monitor stress levels and provide relevant insights.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
