@@ -240,6 +240,8 @@ class HealthKitViewModel: ObservableObject {
         if sessionHeartRate > stressHeartRateThreshold || sessionhrv < stressHRVThreshold {
             stressEvents += 1
             NotificationManager.shared.sendStressNotification()
+            print("stressed")
+            print(stressEvents)
         }
     }
     
