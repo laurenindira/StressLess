@@ -10,6 +10,7 @@ import HealthKit
 import UserNotifications
 import Firebase
 import FirebaseFirestore
+import Combine
 
 
 class HealthKitViewModel: ObservableObject {
@@ -40,6 +41,10 @@ class HealthKitViewModel: ObservableObject {
     
     var errorMessage: String = ""
     private let db = Firestore.firestore()
+    
+    //simulated data
+    @Published var isSimulationMode = true
+    private var simulationCancellable: AnyCancellable?
     
     init() {
         requestAuthorization()
@@ -103,24 +108,55 @@ class HealthKitViewModel: ObservableObject {
         }
     }
     
-    func startSession() {
+//    func startSession() {
+//        stressEvents = 0
+//        heartRateValues = []
+//        sessionStart = Date()
+//        isSessionActive = true
+//        
+//        startTimer()
+//        startHeartRateQuery()
+//        startHRVQuery()
+//    }
+    
+    // simulated start session data
+    @MainActor func startSession() {
         stressEvents = 0
         heartRateValues = []
         sessionStart = Date()
         isSessionActive = true
         
-        startTimer()
-        startHeartRateQuery()
-        startHRVQuery()
+        if isSimulationMode {
+            startFakeSimulation()
+        } else {
+            startTimer()
+            startHeartRateQuery()
+            startHRVQuery()
+        }
     }
     
+//    func endSession() async {
+//        stopTimer()
+//        stopQueries()
+//        isSessionActive = false
+//        await saveSessionResults()
+//        sessionDuration = 0
+//    }
+    
+    // simulated end session data
     func endSession() async {
-        stopTimer()
-        stopQueries()
+        if isSimulationMode {
+            await stopFakeSimulation()
+        } else {
+            stopTimer()
+            stopQueries()
+        }
+        
         isSessionActive = false
         await saveSessionResults()
         sessionDuration = 0
     }
+
     
     private func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
@@ -244,4 +280,25 @@ class HealthKitViewModel: ObservableObject {
         }
         
     }
+    
+    // call simulated data
+    @MainActor private func startFakeSimulation() {
+        FakeHealthData.shared.startSimulation()
+        
+        simulationCancellable = FakeHealthData.shared.$heartRate
+            .combineLatest(FakeHealthData.shared.$hrv)
+            .sink { [weak self] heartRate, hrv in
+                self?.sessionHeartRate = heartRate
+                self?.sessionhrv = hrv
+                self?.heartRateValues.append(heartRate)
+                self?.checkIfStressed()
+            }
+    }
+
+    @MainActor private func stopFakeSimulation() {
+        FakeHealthData.shared.stopSimulation()
+        simulationCancellable?.cancel()
+        simulationCancellable = nil
+    }
+
 }
