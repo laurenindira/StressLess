@@ -10,6 +10,7 @@ import SwiftUI
 struct SessionView: View {
     @EnvironmentObject var auth: AuthViewModel
     @EnvironmentObject var sessionManager: HealthKitViewModel
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         NavigationStack {
@@ -69,6 +70,9 @@ struct SessionView: View {
                 Color.back
                     .ignoresSafeArea()
             }
+        }
+        .alert(isPresented: $sessionManager.triggerStress) {
+            Alert(title: Text("Time for a breather"), message: Text("We've noticed a spike in your stress levels. Try taking a deep breath, or a short break"), dismissButton: .default(Text("I'm good now!")) { sessionManager.triggerStress = false } )
         }
     }
     

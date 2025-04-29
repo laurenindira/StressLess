@@ -44,6 +44,7 @@ struct HealthKitOnboarding: View {
             
         }
         .padding()
+        .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button() {
