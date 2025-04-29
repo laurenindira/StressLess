@@ -314,5 +314,30 @@ class HealthKitViewModel: ObservableObject {
         simulationCancellable = nil
         stopTimer()
     }
+    
+    func fetchUserSessions() async -> [Session] {
+        guard let userID = AuthViewModel.shared.user?.id else {
+            print("ERROR: No user ID found in AuthViewModel.")
+            return []
+        }
+        
+        do {
+            let snapshot = try await db.collection("allSessions")
+                .document(userID)
+                .collection("sessions")
+                .order(by: "sessionDate", descending: false)
+                .getDocuments()
+            
+            let sessions = snapshot.documents.compactMap { doc -> Session? in
+                try? doc.data(as: Session.self)
+            }
+            
+            print("SUCCESS: Loaded \(sessions.count) sessions from Firestore.")
+            return sessions
+        } catch {
+            print("ERROR: Failed to fetch sessions: \(error.localizedDescription)")
+            return []
+        }
+    }
 
 }
