@@ -16,6 +16,8 @@
 		A5408C362DB839F2005A57A9 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = A5408C352DB839F2005A57A9 /* GoogleSignIn */; };
 		A5408C382DB839F2005A57A9 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = A5408C372DB839F2005A57A9 /* GoogleSignInSwift */; };
 		C4DF52142DBFF7E8007FC12B /* XCTHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = C4DF52132DBFF7E8007FC12B /* XCTHealthKit */; };
+		C4DF522B2DC001BE007FC12B /* XCTHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = C4DF522A2DC001BE007FC12B /* XCTHealthKit */; };
+		C4DF522D2DC0023E007FC12B /* XCTHealthKit in Frameworks */ = {isa = PBXBuildFile; productRef = C4DF522C2DC0023E007FC12B /* XCTHealthKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +27,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = A5408B772DB832BD005A57A9;
 			remoteInfo = "StressLess Watch App";
+		};
+		C4DF52222DBFF9CD007FC12B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A5408B602DB832BC005A57A9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5408B672DB832BC005A57A9;
+			remoteInfo = StressLess;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -45,6 +54,7 @@
 /* Begin PBXFileReference section */
 		A5408B682DB832BC005A57A9 /* StressLess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StressLess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5408B782DB832BD005A57A9 /* StressLess Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "StressLess Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C4DF521C2DBFF9CC007FC12B /* StressLessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StressLessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -71,6 +81,11 @@
 			path = "StressLess Watch App";
 			sourceTree = "<group>";
 		};
+		C4DF521D2DBFF9CD007FC12B /* StressLessUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = StressLessUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +108,15 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C4DF522D2DC0023E007FC12B /* XCTHealthKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4DF52192DBFF9CC007FC12B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4DF522B2DC001BE007FC12B /* XCTHealthKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +128,7 @@
 			children = (
 				A5408B6A2DB832BC005A57A9 /* StressLess */,
 				A5408B7C2DB832BD005A57A9 /* StressLess Watch App */,
+				C4DF521D2DBFF9CD007FC12B /* StressLessUITests */,
 				A5408B692DB832BC005A57A9 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,6 +138,7 @@
 			children = (
 				A5408B682DB832BC005A57A9 /* StressLess.app */,
 				A5408B782DB832BD005A57A9 /* StressLess Watch App.app */,
+				C4DF521C2DBFF9CC007FC12B /* StressLessUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -169,10 +195,35 @@
 			);
 			name = "StressLess Watch App";
 			packageProductDependencies = (
+				C4DF522C2DC0023E007FC12B /* XCTHealthKit */,
 			);
 			productName = "StressLess Watch App";
 			productReference = A5408B782DB832BD005A57A9 /* StressLess Watch App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		C4DF521B2DBFF9CC007FC12B /* StressLessUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C4DF52242DBFF9CD007FC12B /* Build configuration list for PBXNativeTarget "StressLessUITests" */;
+			buildPhases = (
+				C4DF52182DBFF9CC007FC12B /* Sources */,
+				C4DF52192DBFF9CC007FC12B /* Frameworks */,
+				C4DF521A2DBFF9CC007FC12B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C4DF52232DBFF9CD007FC12B /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C4DF521D2DBFF9CD007FC12B /* StressLessUITests */,
+			);
+			name = StressLessUITests;
+			packageProductDependencies = (
+				C4DF522A2DC001BE007FC12B /* XCTHealthKit */,
+			);
+			productName = StressLessUITests;
+			productReference = C4DF521C2DBFF9CC007FC12B /* StressLessUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
 
@@ -189,6 +240,10 @@
 					};
 					A5408B772DB832BD005A57A9 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					C4DF521B2DBFF9CC007FC12B = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = A5408B672DB832BC005A57A9;
 					};
 				};
 			};
@@ -213,6 +268,7 @@
 			targets = (
 				A5408B672DB832BC005A57A9 /* StressLess */,
 				A5408B772DB832BD005A57A9 /* StressLess Watch App */,
+				C4DF521B2DBFF9CC007FC12B /* StressLessUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -226,6 +282,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		A5408B762DB832BD005A57A9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C4DF521A2DBFF9CC007FC12B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -249,6 +312,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C4DF52182DBFF9CC007FC12B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -256,6 +326,11 @@
 			isa = PBXTargetDependency;
 			target = A5408B772DB832BD005A57A9 /* StressLess Watch App */;
 			targetProxy = A5408B7A2DB832BD005A57A9 /* PBXContainerItemProxy */;
+		};
+		C4DF52232DBFF9CD007FC12B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5408B672DB832BC005A57A9 /* StressLess */;
+			targetProxy = C4DF52222DBFF9CD007FC12B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -506,6 +581,43 @@
 			};
 			name = Release;
 		};
+		C4DF52252DBFF9CD007FC12B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.xpertcoders.StressLessUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = StressLess;
+			};
+			name = Debug;
+		};
+		C4DF52262DBFF9CD007FC12B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.xpertcoders.StressLessUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = StressLess;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -532,6 +644,15 @@
 			buildConfigurations = (
 				A5408B8D2DB832BE005A57A9 /* Debug */,
 				A5408B8E2DB832BE005A57A9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C4DF52242DBFF9CD007FC12B /* Build configuration list for PBXNativeTarget "StressLessUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C4DF52252DBFF9CD007FC12B /* Debug */,
+				C4DF52262DBFF9CD007FC12B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -602,6 +723,16 @@
 			productName = GoogleSignInSwift;
 		};
 		C4DF52132DBFF7E8007FC12B /* XCTHealthKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DF52122DBFF7E8007FC12B /* XCRemoteSwiftPackageReference "XCTHealthKit" */;
+			productName = XCTHealthKit;
+		};
+		C4DF522A2DC001BE007FC12B /* XCTHealthKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C4DF52122DBFF7E8007FC12B /* XCRemoteSwiftPackageReference "XCTHealthKit" */;
+			productName = XCTHealthKit;
+		};
+		C4DF522C2DC0023E007FC12B /* XCTHealthKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = C4DF52122DBFF7E8007FC12B /* XCRemoteSwiftPackageReference "XCTHealthKit" */;
 			productName = XCTHealthKit;
