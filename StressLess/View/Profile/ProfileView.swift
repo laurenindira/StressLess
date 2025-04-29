@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ProfileView: View {
     @EnvironmentObject var auth: AuthViewModel
+    @EnvironmentObject var sessionManager: HealthKitViewModel
+    
+    @State var isEditing: Bool = false
     
     private let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -31,8 +34,8 @@ struct ProfileView: View {
                     
                     HStack {
                         Spacer()
-                        NavigationLink {
-                            //TODO: add link to edit profile page
+                        Button {
+                            isEditing.toggle()
                         } label: {
                             Text("Edit my info")
                                 .font(.title3).bold()
@@ -53,7 +56,6 @@ struct ProfileView: View {
                     Text(auth.user?.goals.joined(separator: ", ") ?? "No goals set")
                 }
                 .padding()
-                .frame(width: .infinity)
                 .background {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color.white)
@@ -85,19 +87,33 @@ struct ProfileView: View {
             .padding()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        SettingsView()
-                    } label: {
-                        Image(systemName: "gear")
-                            .font(.title3)
-                            .foregroundStyle(Color.dol)
+                    HStack {
+                        NavigationLink {
+                            SettingsView()
+                        } label: {
+                            Image(systemName: "gear")
+                                .font(.title3)
+                                .foregroundStyle(Color.dol)
+                        }
+                        
+                        Button {
+                            isEditing.toggle()
+                        } label: {
+                            Image(systemName: "pencil")
+                                .font(.title3)
+                                .foregroundStyle(Color.dol)
+                        }
                     }
+                    
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background {
                 Color.back
                     .ignoresSafeArea()
+            }
+            .sheet(isPresented: $isEditing) {
+                EditProfileView(isEditing: $isEditing)
             }
         }
     }
@@ -106,6 +122,7 @@ struct ProfileView: View {
 #Preview {
     ProfileView()
         .environmentObject(AuthViewModel())
+        .environmentObject(HealthKitViewModel())
 }
 
 
