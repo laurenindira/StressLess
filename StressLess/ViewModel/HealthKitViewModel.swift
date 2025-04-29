@@ -33,6 +33,7 @@ class HealthKitViewModel: ObservableObject {
     private var heartRateQuery: HKAnchoredObjectQuery?
     private var hrvQuery: HKAnchoredObjectQuery?
     private var sessionStart: Date?
+    private var lastStressNotificationTime: Date? = nil
     
     //stress thresholds
     //TODO: fix thresholds based on scientific literature
@@ -237,11 +238,18 @@ class HealthKitViewModel: ObservableObject {
     }
     
     private func checkIfStressed() {
-        if sessionHeartRate > stressHeartRateThreshold || sessionhrv < stressHRVThreshold {
+        let isStressed = sessionHeartRate > stressHeartRateThreshold || sessionhrv < stressHRVThreshold
+        if isStressed {
             stressEvents += 1
-            NotificationManager.shared.sendStressNotification()
             print("stressed")
-            print(stressEvents)
+            
+            let now = Date()
+            // notify if more than x secs since the last notif
+            if lastStressNotificationTime == nil || now.timeIntervalSince(lastStressNotificationTime!) > 30 {
+                NotificationManager.shared.sendStressNotification()
+                lastStressNotificationTime = now
+                print("Stress notification triggered. Total: \(stressEvents)")
+            }
         }
     }
     
