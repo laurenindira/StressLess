@@ -293,6 +293,9 @@ class HealthKitViewModel: ObservableObject {
     
     // call simulated data
     @MainActor private func startFakeSimulation() {
+        sessionDuration = 0
+        startTimer()
+        
         FakeHealthData.shared.startSimulation()
         
         simulationCancellable = FakeHealthData.shared.$heartRate
@@ -309,6 +312,7 @@ class HealthKitViewModel: ObservableObject {
         FakeHealthData.shared.stopSimulation()
         simulationCancellable?.cancel()
         simulationCancellable = nil
+        stopTimer()
     }
 
 }
