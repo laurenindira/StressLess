@@ -28,7 +28,9 @@ struct TrendsView: View {
                         .background(Color.white)
                         .cornerRadius(20)
                         .shadow(radius: 2)
+                        .frame(maxWidth: .infinity)
                     
+                    // acute stress moments chart
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Acute Stress Moments")
                             .font(.title3)
@@ -44,10 +46,12 @@ struct TrendsView: View {
                                 .padding()
                         } else {
                             Chart {
-                                ForEach(sessions) { session in
+                                ForEach(stressData.indices, id: \.self) { index in
+                                    let dataPoint = stressData[index]
+
                                     PointMark(
-                                        x: .value("Date", formattedDate(session.sessionDate)),
-                                        y: .value("Stress Events", session.stressEvents)
+                                        x: .value("Date", dataPoint.dateLabel),
+                                        y: .value("Stress Events", dataPoint.stressEvents)
                                     )
                                     .foregroundStyle(Color.purple)
                                     .symbol(Circle())
@@ -63,8 +67,58 @@ struct TrendsView: View {
                     .background(Color.white)
                     .cornerRadius(20)
                     .shadow(radius: 2)
+                    .frame(maxWidth: .infinity)
+                    
+                    // peak heart rate chart
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text("Peak Heart Rate")
+                            .font(.title3)
+                            .bold()
+
+                        Text("These are the recorded maximum heart rates recorded for each day a study session is initiated")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+
+                        if sessions.isEmpty {
+                            Text("No session data available yet.")
+                                .foregroundColor(.gray)
+                                .padding()
+                        } else {
+                            Chart {
+                                ForEach(heartRateData.indices, id: \.self) { index in
+                                    let dataPoint = heartRateData[index]
+
+                                    LineMark(
+                                        x: .value("Date", dataPoint.dateLabel),
+                                        y: .value("Max HR", dataPoint.maxHR)
+                                    )
+                                    .foregroundStyle(Color.purple)
+                                    .lineStyle(StrokeStyle(lineWidth: 1))
+
+                                    PointMark(
+                                        x: .value("Date", dataPoint.dateLabel),
+                                        y: .value("Max HR", dataPoint.maxHR)
+                                    )
+                                    .foregroundStyle(Color.purple)
+                                    .symbol(Circle())
+                                }
+                            }
+                            .chartYScale(domain: 100...180)
+                            .frame(height: 250)
+                            .padding()
+                            .chartXAxisLabel("Session Date", alignment: .center)
+                            .chartYAxisLabel("Max Heart Rate (BPM)", alignment: .center)
+                        }
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(20)
+                    .shadow(radius: 2)
+                    .frame(maxWidth: .infinity)
+                    
                 }
                 .padding()
+                .frame(maxWidth: .infinity)
             }
             .background(Color.back.ignoresSafeArea())
             .task {
@@ -81,8 +135,20 @@ struct TrendsView: View {
     
     private func formattedDate(_ date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateStyle = .short
+        formatter.dateFormat = "M/d"
         return formatter.string(from: date)
+    }
+    
+    private var stressData: [(dateLabel: String, stressEvents: Int)] {
+        sessions.map {
+            (dateLabel: formattedDate($0.sessionDate), stressEvents: $0.stressEvents)
+        }
+    }
+
+    private var heartRateData: [(dateLabel: String, maxHR: Double)] {
+        sessions.map {
+            (dateLabel: formattedDate($0.sessionDate), maxHR: $0.maxHeartRate)
+        }
     }
 
 }
