@@ -15,6 +15,10 @@ struct StressLessApp: App {
     @StateObject private var auth = AuthViewModel.shared
     @StateObject var healthKitManager = HealthKitViewModel.shared
     
+    init() {
+        FakeHealthData.shared.startSimulation()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()

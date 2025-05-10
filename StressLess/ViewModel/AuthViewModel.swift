@@ -247,7 +247,9 @@ class AuthViewModel: NSObject, ObservableObject {
         do {
             let snapshot = try await db.collection("users").document(currentUser.uid).getDocument()
             if let userData = snapshot.data() {
-                let currentUser = try Firestore.Decoder().decode(User.self, from: userData)
+                var currentUser = try Firestore.Decoder().decode(User.self, from: userData)
+                currentUser.averageHeartRate = await FakeHealthData.shared.restingHeartRate
+                currentUser.averageHRV = await FakeHealthData.shared.averageHRV
                 self.user = currentUser
                 saveUserToCache(currentUser)
                 print("CURRENT USER: \(String(describing: self.user))")

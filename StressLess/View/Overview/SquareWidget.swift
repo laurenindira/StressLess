@@ -25,7 +25,7 @@ struct SquareWidget: View {
             HStack {
                 Image(systemName: icon)
                     .font(.system(size: 35))
-                    .padding(.trailing, 20)
+                    .padding(.trailing, 10)
                 Text(value)
                     .font(.system(size: 24))
                 Text(measurement ?? "")

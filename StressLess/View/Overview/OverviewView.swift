@@ -53,12 +53,12 @@ struct OverviewView: View {
                         .font(.system(size: 30))
                         .bold()
                     HStack (spacing: 20) {
-                        SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(describing: auth.user?.averageHeartRate ?? 0) , measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
+                        SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(format: "%.0f", auth.user?.averageHeartRate ?? 0.0), measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
                         SquareWidget(mainText: "Last Study Session", icon: "calendar", value: dateFormatter.string(from:  auth.user?.lastSession ?? Date()) , space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressyellow)
                     }
                     
                     HStack (spacing: 20) {
-                        SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(describing: auth.user?.averageHRV ?? 0) , measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
+                        SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(format: "%.1f", auth.user?.averageHRV ?? 0.0), measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
                         NavigationLink {
                             //TODO: add nav link to quiz
                         } label: {
