@@ -22,7 +22,7 @@ struct EditProfileView: View {
         return formatter
     }()
     
-    let goals = ["Manage acute stress during work periods", "Reduce the number of stress events experienced", "Track stress levels over time"]
+    let goals = ["Reduce my stress during work/study sessions over time", "Reduce the amount of acute stress experienced during a session", "Track my stress levels over time"]
     
     var body: some View {
         NavigationStack {
@@ -30,15 +30,16 @@ struct EditProfileView: View {
                 Text("Edit Profile")
                     .font(.system(size: 25))
                     .bold()
+                    .padding(.bottom, 20)
                 
-                VStack(alignment: .leading, spacing: 12) {
+                VStack(alignment: .leading, spacing: 20) {
                     VStack(alignment: .leading, spacing: 5) {
                         Text("New Display Name")
                             .font(.headline)
                         GenTextField(placeholder: "display name", text: $displayName)
                     }
                     
-                    VStack (spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
                         Text("Change Goals")
                             .font(.headline)
                         ForEach(goals, id: \.self) { goal in
@@ -59,6 +60,7 @@ struct EditProfileView: View {
                         }
                     }
                 }
+                .padding(.bottom, 20)
                 
                 Button {
                     guard let currentUser = auth.user else { return }
