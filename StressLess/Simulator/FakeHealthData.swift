@@ -17,6 +17,8 @@ class FakeHealthData: ObservableObject {
     
     private var timer: Timer?
     @Published var isSimulating = false
+    @Published var restingHeartRate: Double = 65
+    @Published var averageHRV: Double = 55
     
     private let normalHeartRateRange = 65.0...80.0
     private let stressHeartRateRange = 100.0...140.0
@@ -30,6 +32,8 @@ class FakeHealthData: ObservableObject {
     func startSimulation() {
         stopSimulation()
         isSimulating = true
+        
+        generateFakeBase()
         
         timer = Timer.scheduledTimer(withTimeInterval: 3.0, repeats: true) { [weak self] _ in
             Task { @MainActor in
@@ -56,5 +60,10 @@ class FakeHealthData: ObservableObject {
             heartRate = Double.random(in: normalHeartRateRange)
             hrv = Double.random(in: normalHRVRange)
         }
+    }
+    
+    private func generateFakeBase() {
+        restingHeartRate = Double.random(in: 60.0...70.0)
+        averageHRV = Double.random(in: 45.0...65.0)
     }
 }
