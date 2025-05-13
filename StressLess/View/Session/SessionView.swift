@@ -27,32 +27,39 @@ struct SessionView: View {
                 }
                 
                 //CONTROLS
-                VStack(alignment: .leading) {
-                    Text("Controls")
-                        .bold()
-                    .font(.system(size: 30))
-                    
-                    //Start/stop button
-                    if sessionManager.isSessionActive {
-                        Button {
-                            Task { await sessionManager.endSession() }
-                        } label: {
-                            GenButton(text: "End Session", backgroundColor: Color.stressred, textColor: Color.lod, isSystemImage: false)
-                        }
-                    } else {
-                        Button {
-                            sessionManager.startSession()
-                        } label: {
-                            GenButton(text: "Start Session", backgroundColor: Color.stressgreen, textColor: Color.dol, isSystemImage: false)
+                VStack(spacing: 20) {
+                    VStack(alignment: .leading) {
+                        Text("Controls")
+                            .bold()
+                            .font(.system(size: 30))
+                        
+                        //Start/stop button
+                        if sessionManager.isSessionActive {
+                            Button {
+                                Task { await sessionManager.endSession() }
+                            } label: {
+                                GenButton(text: "End Session", backgroundColor: Color.stressred, textColor: Color.lod, isSystemImage: false)
+                            }
+                        } else {
+                            Button {
+                                sessionManager.startSession()
+                            } label: {
+                                GenButton(text: "Start Session", backgroundColor: Color.stressgreen, textColor: Color.lod, isSystemImage: false)
+                            }
                         }
                     }
                     
-                    Text("Session Duration: \(formatTime(sessionManager.sessionDuration))")
-                        .font(.headline)
+                    VStack(alignment: .center) {
+                        Text("Session Duration: \(formatTime(sessionManager.sessionDuration))")
+                            .font(.title2).bold()
+                    }
                     
-                    HStack {
-                        SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(format: "%.0f", sessionManager.sessionHeartRate), measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
-                        SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(format: "%.0f", sessionManager.sessionhrv), measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
+                    
+                    VStack(alignment: .center) {
+                        HStack {
+                            SquareWidget(mainText: "Resting Heart Rate", icon: "heart.fill", value: String(format: "%.0f", sessionManager.sessionHeartRate), measurement: "bpm", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stressorange)
+                            SquareWidget(mainText: "Heart Rate Variability", icon: "heart.fill", value: String(format: "%.0f", sessionManager.sessionhrv), measurement: "ms", space: UIScreen.main.bounds.width, divider: 2.25, background: Color.stresspink)
+                        }
                     }
                 }
                 .padding(.vertical, 20)
@@ -60,7 +67,7 @@ struct SessionView: View {
                     RoundedRectangle(cornerRadius: 25)
                         .fill(Color.white)
                         .padding(.horizontal, -15)
-                        
+                    
                         .shadow(color: Color.prim.opacity(0.25), radius: 3, y: -2)
                 }
             }
@@ -83,8 +90,8 @@ struct SessionView: View {
     }
 }
 
-//#Preview {
-//    SessionView()
-//        .environmentObject(AuthViewModel())
-//        .environmentObject(HealthKitViewModel())
-//}
+#Preview {
+    SessionView()
+        .environmentObject(AuthViewModel())
+        .environmentObject(HealthKitViewModel())
+}

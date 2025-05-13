@@ -14,14 +14,17 @@ struct GoalChoiceOnboarding: View {
     @Binding var user: User
     @Binding var step: Int
     
-    let goals = ["Manage acute stress during work periods", "Reduce the number of stress events experienced", "Track stress levels over time"]
+    let goals = ["Reduce my stress during work/study sessions over time", "Reduce the amount of acute stress experienced during a session", "Track my stress levels over time"]
     
     var selectedGoals: [String] = []
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Alright! Now choose a goal")
+            Text("Alright! Now choose one or more goals")
                 .font(.headline)
+            Text("Acute stress refers to any high intensity stress moments that you may experience during a session, as opposed to stress you might feel during finals season")
+                .font(.subheadline)
+                .padding(.bottom, 20)
             
             VStack (spacing: 10) {
                 ForEach(goals, id: \.self) { goal in

@@ -53,13 +53,18 @@ struct ProfileView: View {
                     Text("My Goals")
                         .font(.title2)
                         .bold()
-                    Text(auth.user?.goals.joined(separator: ", ") ?? "No goals set")
+                    HStack() {
+                        Text(auth.user?.goals.joined(separator: ", ") ?? "No goals set")
+                    }
+                    .frame(width: UIScreen.main.bounds.width * 0.85)
                 }
                 .padding()
+                
                 .background {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(Color.white)
                         .shadow(color: Color.prim.opacity(0.25), radius: 3, y: 2)
+                        
                 }
                 
                 //PERSONAL INFORMATION
@@ -72,7 +77,6 @@ struct ProfileView: View {
                     ProfileRow(title: "Number of sessions", content: String(describing: auth.user?.totalSessions ?? 0))
                     ProfileRow(title: "Average Heart Rate", content: String(describing: auth.user?.averageHeartRate ?? 0))
                     ProfileRow(title: "Average HRV", content: String(describing: auth.user?.averageHRV ?? 0))
-                    ProfileRow(title: "Data Source", content: auth.user?.dataSource ?? "unknown")
                     ProfileRow(title: "Stressed Less since", content: dateFormatter.string(from:  auth.user?.creationDate ?? Date()) )
                 }
                 .padding()
@@ -87,24 +91,13 @@ struct ProfileView: View {
             .padding()
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    HStack {
-                        NavigationLink {
-                            SettingsView()
-                        } label: {
-                            Image(systemName: "gear")
-                                .font(.title3)
-                                .foregroundStyle(Color.dol)
-                        }
-                        
-                        Button {
-                            isEditing.toggle()
-                        } label: {
-                            Image(systemName: "pencil")
-                                .font(.title3)
-                                .foregroundStyle(Color.dol)
-                        }
+                    NavigationLink {
+                        SettingsView()
+                    } label: {
+                        Image(systemName: "gear")
+                            .font(.title3)
+                            .foregroundStyle(Color.dol)
                     }
-                    
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
